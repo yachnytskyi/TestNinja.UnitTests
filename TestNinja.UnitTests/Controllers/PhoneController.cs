@@ -19,5 +19,31 @@ namespace TestNinja.UnitTests.Controllers
         {
             return View(repo.GetAll());
         }
+        public IActionResult GetPhone(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest();
+            }
+            Phone phone = repo.Get(id.Value);
+            if (phone == null)
+            {
+                return NotFound();
+            }
+            return View(phone);
+        }
+
+        public IActionResult AddPhone() => View();
+
+        [HttpPost]
+        public IActionResult AddPhone(Phone phone)
+        {
+            if (ModelState.IsValid)
+            {
+                repo.Create(phone);
+                return RedirectToAction("Index");
+            }
+            return View(phone);
+        }
     }
 }
